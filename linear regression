@@ -1,0 +1,35 @@
+def loadtxtMethod(filename):
+    data=np.loadtxt(filename,dtype=str,delimiter=',')
+    return data
+if __name__=="__main__":
+    data=loadtxtMethod('D:\\sutdy documents\\Coursera-ML-AndrewNg-Notes-master\\code\\ex1-linear regression\\ex1data1.txt')
+
+x=np.zeros((len(data),1))
+y=np.zeros((len(data),1))
+for i in range(len(data)):
+    x[i]=float(data[i][0])
+    y[i]=float(data[i][1])
+X=np.ones((len(data),2))
+x=(x-np.mean(x))/(np.max(x)-np.min(x))
+y=(y-np.mean(y))/(np.max(y)-np.min(y))
+X[:,1]=x[:,0]
+theta=np.zeros((2,1))
+plt.scatter(x,y)
+alpha=0.03
+for j in range(1500):
+    temp0=theta[0,0]-alpha/len(data)*np.sum(np.dot(X,theta)-y)
+    temp1=theta[1,0]-alpha/len(data)*np.sum(((np.dot(X,theta)-y)*x))
+    theta[0][0]=temp0
+    theta[1][0]=temp1
+print(theta)
+t=np.arange(-0.2,0.8,0.05)
+# print(t)
+s=theta[0,0]+theta[1,0]*t
+# print(s)
+plt.plot(t,s)
+T=X.transpose()
+lamda=np.linalg.inv(T.dot(X)).dot(T.dot(y))
+print(lamda)
+s=lamda[0,0]+lamda[1,0]*t
+plt.plot(t,s,'r')
+plt.show()
